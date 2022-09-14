@@ -2,6 +2,10 @@ class LinkedListNode<T> {
   public next: LinkedListNode<T> | null = null
   public prev: LinkedListNode<T> | null = null
   constructor(public value: T) {}
+
+  public toString(callback?: (value: T) => string) {
+    return callback ? callback(this.value) : `${this.value}`
+  }
 }
 
 interface ILinkedList<T> {
@@ -9,12 +13,14 @@ interface ILinkedList<T> {
   prepend(value: T): LinkedListNode<T>
   contains(value: T): boolean
   remove(value: T): void
-  traverse(): T[]
+  removeHead(): T | null
   size(): number
+  toArray(): LinkedListNode<T>[]
+  toString(callback: (value: T) => string): string
 }
 
 export class LinkedList<T> implements ILinkedList<T> {
-  private head: LinkedListNode<T> | null = null
+  public head: LinkedListNode<T> | null = null
 
   public add(value: T) {
     const node = new LinkedListNode(value)
@@ -51,6 +57,22 @@ export class LinkedList<T> implements ILinkedList<T> {
     return !!pointer
   }
 
+  public removeHead() {
+    if (!this.head) {
+      return null
+    }
+
+    const node = this.head
+
+    if (this.head.next) {
+      this.head = this.head.next
+    } else {
+      this.head = null
+    }
+
+    return node.value
+  }
+
   public remove(value: T) {
     if (!this.head) {
       return
@@ -75,16 +97,6 @@ export class LinkedList<T> implements ILinkedList<T> {
     pointer.next = pointer.next.next
   }
 
-  public traverse() {
-    const nodes: T[] = []
-    let pointer = this.head
-    while (pointer) {
-      nodes.push(pointer.value)
-      pointer = pointer.next
-    }
-    return nodes
-  }
-
   public size() {
     let count = 0
     let pointer = this.head
@@ -93,5 +105,21 @@ export class LinkedList<T> implements ILinkedList<T> {
       pointer = pointer.next
     }
     return count
+  }
+
+  public toArray() {
+    const nodes: LinkedListNode<T>[] = []
+    let pointer = this.head
+    while (pointer) {
+      nodes.push(pointer)
+      pointer = pointer.next
+    }
+    return nodes
+  }
+
+  public toString(callback?: (value: T) => string) {
+    return this.toArray()
+      .map(node => node.toString(callback))
+      .toString()
   }
 }
