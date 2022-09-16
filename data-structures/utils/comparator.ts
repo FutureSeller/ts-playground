@@ -1,11 +1,11 @@
 // Reference: https://github.com/trekhleb/javascript-algorithms
-type CompareFunctionType<T> = (a: T, b: T) => 0 | -1 | 1
+export type CompareFunctionType<T> = (a: T, b: T) => 0 | -1 | 1
 
 export class Comparator<T> {
   private compare: CompareFunctionType<T>
 
   constructor(compareFunction?: CompareFunctionType<T>) {
-    this.compare = compareFunction ?? Comparator.defaultCompareFunction
+    this.compare = compareFunction || Comparator.defaultCompareFunction
   }
 
   static defaultCompareFunction<T>(a: T, b: T) {
@@ -24,8 +24,16 @@ export class Comparator<T> {
     return this.compare(a, b) < 0
   }
 
+  lessThanEqual(a: T, b: T) {
+    return this.compare(a, b) <= 0
+  }
+
   greaterThan(a: T, b: T) {
     return this.compare(a, b) > 0
+  }
+
+  greaterThanEqual(a: T, b: T) {
+    return this.compare(a, b) >= 0
   }
 
   reverse() {
