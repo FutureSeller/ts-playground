@@ -37,3 +37,5 @@ type MyInstanceType<T extends new (...args: any) => any> = T extends new (...arg
 type MyRequired<T> = {
   [Key in keyof T]-?: T[Key]
 }
+
+type MyAwaited<T> = T extends Promise<infer R> ? R : never
