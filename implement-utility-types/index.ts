@@ -39,3 +39,15 @@ type MyRequired<T> = {
 }
 
 type MyAwaited<T> = T extends Promise<infer R> ? R : never
+
+export type MyMaybe<T> = T | null
+
+export type MuNonFunctionPropertyNames<T> = {
+  [K in keyof T]: T[K] extends (...args: unknown[]) => void ? never : K
+}[keyof T]
+
+export type MyNonFunctionProperties<T> = Pick<T, MuNonFunctionPropertyNames<T>>
+
+export type MyMerge<F, S> = {
+  [Key in keyof F | keyof S]: Key extends keyof S ? S[Key] : Key extends keyof F ? F[Key] : never
+}
